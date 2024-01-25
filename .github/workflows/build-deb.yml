@@ -1,0 +1,39 @@
+name: Build Debian Package
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "debian/**"
+      - "**.sh"
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: ubuntu
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Debian
+        run: |
+          mkdir hidebian && mkdir hidebian/DEBIAN
+          mkdir -p hidebian/usr/local/bin
+          cp count_files.sh hidebian/usr/local/bin/
+          cp debian/control hidebian/DEBIAN
+          dpkg-deb --build hidebian
+          dpkg -i hidebian.deb
+          chmod +x /usr/local/bin/count_files.sh
+
+      - name: Upload Debian
+        uses: actions/upload-artifact@v2
+        with:
+          name: deb-package
+          path: |
+            ~/.deb
