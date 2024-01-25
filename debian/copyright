@@ -1,0 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: countfiles
+Source: https://github.com/23ALeXaNDeR03/system_programming
+
+Files: *
+Copyright: (c) 2024 Alexander Kuznetsov
+License: MIT
