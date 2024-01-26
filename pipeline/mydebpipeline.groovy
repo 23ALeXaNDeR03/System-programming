@@ -5,6 +5,7 @@ pipeline {
         stage('Execute commands') {
             steps {
                 script {
+                    if(!fileExists('testdebian')){
                     sh 'mkdir testdebian'
                     sh 'mkdir testdebian/DEBIAN'
                     sh 'mkdir testdebian/usr'
@@ -16,15 +17,16 @@ pipeline {
                     sh 'mv system_programming-main/count_files.sh testdebian/usr/local/bin/'
                     sh 'dpkg-deb --build testdebian'
                 }
+                }
             }
         }
         stage('Install Debian Package') {
             steps {
                 script {
-                    sh 'dpkg -i testdebian.deb'
-                    sh 'chmod +x /usr/local/bin/count_files.sh'
-                    sh 'count_files.sh --check_dir=system_programming-main'
-                    sh 'rm -r system_programming-main'
+                    sh 'sudo dpkg -i testdebian.deb'
+                    sh 'sudo chmod +x /usr/local/bin/count_files.sh'
+                    sh 'sudo count_files.sh --check_dir=system_programming-main'
+                    sh 'sudo rm -rf system_programming-main'
                 }
             }
         }
